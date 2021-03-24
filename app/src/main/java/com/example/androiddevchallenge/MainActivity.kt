@@ -15,47 +15,74 @@
  */
 package com.example.androiddevchallenge
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.androiddevchallenge.ui.theme.MyTheme
+import androidx.core.view.WindowCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.androiddevchallenge.AppState.Loaded
+import com.example.androiddevchallenge.AppState.Loading
+import com.example.androiddevchallenge.AppState.RequestingPermission
+import com.example.androiddevchallenge.ui.theme.WeatherAppTheme
+import com.google.android.gms.location.LocationServices
+import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val locationProvider = LocationServices.getFusedLocationProviderClient(this)
+
         setContent {
-            MyTheme {
-                MyApp()
+            WeatherAppTheme {
+                val vm = viewModel(HomeViewModel::class.java)
+                val state = vm.appState.collectAsState().value
+
+                ProvideWindowInsets {
+                    Home(state = state) { permissionGranted ->
+                        if (permissionGranted) {
+                            locationProvider.lastLocation.addOnSuccessListener { loc ->
+                                if (loc != null) {
+                                    vm.fetchWeatherForLocation(loc)
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
 
-// Start building your app here!
+@SuppressLint("MissingPermission")
 @Composable
-fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+fun Home(state: AppState, onPermissionGranted: (Boolean) -> Unit = {}) {
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+        Crossfade(targetState = state) {
+            when (it) {
+                is RequestingPermission -> RequestPermission(onPermissionGranted)
+                is Loading -> Loading()
+                is Loaded -> WeatherHome(it.data)
+            }
+        }
     }
 }
 
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
+@Preview(showBackground = true)
 @Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
-
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+fun DefaultPreview() {
+    WeatherAppTheme {
+        Home(state = Loading)
     }
 }

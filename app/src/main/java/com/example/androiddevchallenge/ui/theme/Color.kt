@@ -15,9 +15,40 @@
  */
 package com.example.androiddevchallenge.ui.theme
 
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 
-val purple200 = Color(0xFFBB86FC)
-val purple500 = Color(0xFF6200EE)
-val purple700 = Color(0xFF3700B3)
-val teal200 = Color(0xFF03DAC5)
+val white = Color(0xFFFFFF)
+val black = Color(0xFF000000)
+val color1 = Color(0xFF052731)
+val color3 = Color(0xFF242D28)
+val color4 = Color(0xFF7DEFF4)
+val color5 = Color(0xFF17518C)
+val color6 = Color(0xFF76E8FC)
+val color7 = Color(0xFF480F24)
+val color8 = Color(0xFF4E887D)
+val color9 = Color(0xFF00303E)
+
+val DarkColorPalette = darkColors(
+    primary = black,
+    onPrimary = white,
+    background = black,
+    onBackground = white
+)
+
+val LightColorPalette = lightColors(
+    primary = white,
+    onPrimary = black,
+    background = white,
+    onBackground = black
+
+    /* Other default colors to override
+    background = Color.White,
+    surface = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color.Black,
+    onSurface = Color.Black,
+    */
+)

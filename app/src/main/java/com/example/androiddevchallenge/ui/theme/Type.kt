@@ -17,18 +17,51 @@ package com.example.androiddevchallenge.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.androiddevchallenge.R
+
+private val Lato = FontFamily(
+    Font(R.font.lato_bold, FontWeight.Bold),
+    Font(R.font.lato_black, FontWeight.Black),
+    Font(R.font.lato_regular, FontWeight.Normal),
+    Font(R.font.lato_light, FontWeight.Light),
+)
 
 // Set of Material typography styles to start with
-val typography = Typography(
+val Typography = Typography(
     body1 = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = Lato,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
+    ),
+    h1 = TextStyle(
+        fontFamily = Lato,
+        fontWeight = FontWeight.Normal,
+        fontSize = 176.sp,
+        letterSpacing = 0.sp
+    ),
+    h4 = TextStyle(
+        fontFamily = Lato,
+        fontWeight = FontWeight.Black,
+        fontSize = 16.sp,
+        letterSpacing = 1.25.sp
+    ),
+    h5 = TextStyle(
+        fontFamily = Lato,
+        fontWeight = FontWeight.Black,
+        fontSize = 12.sp,
+        letterSpacing = 1.sp
+    ),
+    h6 = TextStyle(
+        fontFamily = Lato,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        letterSpacing = .5.sp
     )
-        /* Other default text styles to override
+    /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
